@@ -1,0 +1,131 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Defiled Networks</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap');
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Oswald', sans-serif;
+            overflow: hidden;
+            height: 100%;
+            background-color: #0f0f11;
+            color: #ff6a00;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .logo {
+            max-width: 400px;
+            margin-bottom: 20px;
+        }
+
+        .purpose {
+            font-size: 1.2em;
+            max-width: 700px;
+            color: #d0c6f0;
+            margin-bottom: 50px;
+        }
+
+        .tagline {
+            font-size: 1.5em;
+            opacity: 0;
+            animation: fadeTaglines 20s infinite;
+        }
+
+        @keyframes fadeTaglines {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            25% { opacity: 1; }
+            35% { opacity: 0; }
+            100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+<canvas id="matrixCanvas"></canvas>
+<div class="content">
+    <img src="assets/logo.png" alt="Defiled Networks Logo" class="logo">
+    <div class="purpose">Exposing what lurks in the shadows of your network and the crypts of your data.</div>
+    <div class="tagline" id="tagline">The breach has already begun.</div>
+</div>
+
+<script>
+    const canvas = document.getElementById('matrixCanvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+
+    const letters = "010101010101";
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = Array(Math.floor(columns)).fill(1);
+
+    function draw() {
+        ctx.fillStyle = "rgba(15, 15, 17, 0.08)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = "#ff6a00";
+        ctx.font = fontSize + "px monospace";
+
+        for (let i = 0; i < drops.length; i++) {
+            const text = letters.charAt(Math.floor(Math.random() * letters.length));
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+
+            drops[i]++;
+        }
+    }
+
+    setInterval(draw, 35);
+
+    // Fade taglines
+    const taglines = [
+        "What you missed is what will destroy you.",
+        "The breach has already begun.",
+        "You don’t know what’s been watching.",
+        "Trust is the greatest vulnerability.",
+        "If you haven’t found the threat, it’s already inside."
+    ];
+    let index = 0;
+    const taglineElement = document.getElementById("tagline");
+
+    function changeTagline() {
+        index = (index + 1) % taglines.length;
+        taglineElement.style.opacity = 0;
+        setTimeout(() => {
+            taglineElement.textContent = taglines[index];
+            taglineElement.style.opacity = 1;
+        }, 1000);
+    }
+
+    setInterval(changeTagline, 5000);
+</script>
+</body>
+</html>
